@@ -1,8 +1,9 @@
 #include QMK_KEYBOARD_H
 
 #define LT_CPS LT(1, KC_CAPS)
-#define OSX_LED_IDX 14
-#define POE_LED_IDX 29
+#define WIN_LED_IDX 29
+#define OSX_LED_IDX 43
+#define POE_LED_IDX 57
 
 enum {
       _LAYER0 = 0,
@@ -44,32 +45,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 void keyboard_post_init_user(void) {
     // Call the post init code.
-    rgblight_enable_noeeprom();                          // enables Rgb, without saving settings
-    rgblight_sethsv_noeeprom(0, 0, 0);             // sets the color to teal/cyan without saving
-    rgblight_mode_noeeprom(RGB_MATRIX_NONE);   
+    rgb_matrix_mode(RGB_MATRIX_NONE);
 }
 
-// bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-//     switch (keycode) {
-//         case TO(0):
-//             rgblight_setrgb_at(RGB_BLACK, OSX_LED_IDX);
-//             rgblight_setrgb_at(RGB_BLACK, POE_LED_IDX);
-//             return true;
-
-//         case TO(1):
-//             rgblight_setrgb_at(RGB_AZURE, OSX_LED_IDX);
-//             return true;
-
-//         case TO(2):
-//             rgblight_setrgb_at(RGB_AZURE, POE_LED_IDX);
-//             return true;
-
-//         case TT(3):
-//             // rgb_matrix_sethsv(158.66, 151.215, 209.1); // Royale Blue
-//             return true;
-
-//         default:
-//             return true;
-
-//     }
-// }
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    switch(get_highest_layer(layer_state|default_layer_state)) {
+        case 0:
+            rgb_matrix_set_color_all(0,0,0);
+            rgb_matrix_set_color(WIN_LED_IDX, RGB_BLUE);
+            break;
+        case 1:
+            rgb_matrix_set_color_all(0,0,0);
+            rgb_matrix_set_color(OSX_LED_IDX, RGB_BLUE);
+            break;
+        case 2:
+            rgb_matrix_set_color_all(0,0,0);
+            rgb_matrix_set_color(POE_LED_IDX, RGB_BLUE);
+            break;
+        default:
+            break;
+    }
+    return false;
+}
